@@ -2,7 +2,8 @@
 
 https://drawsql.app/teams/raxsons-team/diagrams/lesson-schedule-management-system
 
-<img width="569" alt="opera_yx80FDlptS" src="https://github.com/user-attachments/assets/74d88586-713e-4be9-8763-4c7c18169211">
+<img width="568" alt="opera_iYhwY2IpOV" src="https://github.com/user-attachments/assets/7d4581fd-0413-4c14-a525-5083a30c7c1b">
+
 
 
 <h1>Database documentation for the class schedule management system</h1>
