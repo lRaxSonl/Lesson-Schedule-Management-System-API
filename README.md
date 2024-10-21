@@ -111,3 +111,22 @@ https://drawsql.app/teams/raxsons-team/diagrams/lesson-schedule-management-syste
   end_time (datetime) - The end time of the lesson.<br>
   <b>Connections:</b><br>
   Allows you to track class schedules for groups and teachers in specific classrooms.<br>
+
+  <h3>notifications</h3>
+<br>
+<b>Description: Stores notifications for students and teachers.</b><br>
+<b>Fields:<b><br>
+  id (int, PK) - The unique identifier of the notification.<br>
+  user_id (int, FK) - Link to students.id or teachers.id (generalized field for users).<br>
+  message (text) - The text of the notification.<br>
+  is_read (boolean) - The status of reading the notification (true/false).<br>
+  created_at (timestamp) - The date and time the notification was created.<br>
+<b>Communications:</b><br>
+Allows you to send notifications about schedule changes or other important events.<br>
+  <br>
+<b>Description of the relationships between tables:</b><br>
+students <-> student_groups <-> groups: Allows you to determine which group each student belongs to.<br>
+groups <-> group_subjects <-> subjects: Allows you to determine which subjects are available to the students of the group before creating a schedule.<br>
+teachers <-> subject_teachers <-> subjects: Allows you to determine which subjects each teacher can teach.<br>
+schedule: Connects subjects, teachers, classes, and groups to create a specific schedule.<br>
+notifications: Informs users about schedule changes or other events.<br>
