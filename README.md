@@ -12,12 +12,12 @@ https://drawsql.app/teams/raxsons-team/diagrams/lesson-schedule-management-syste
 <h3>students</h3>
 
 <b>Description: Stores information about registered students.</b>
-<b>Fields:</b>
-  id (int, PK) - The unique identifier of the student.
-  username (varchar) is the student's login to log in.
-  password (varchar) is a hashed password.
-  email (varchar) is the student's email address.
-  fullname (varchar) is the full name of the student.
-<b>Connections:</b>
+<b>Fields:</b><br>
+  id (int, PK) - The unique identifier of the student.<br>
+  username (varchar) is the student's login to log in.<br>
+  password (varchar) is a hashed password.<br>
+  email (varchar) is the student's email address.<br>
+  fullname (varchar) is the full name of the student.<br>
+<b>Connections:</b><br>
   Linked to student_groups via id to identify the groups the student belongs to.
-  teachers
+  teachers<br>
