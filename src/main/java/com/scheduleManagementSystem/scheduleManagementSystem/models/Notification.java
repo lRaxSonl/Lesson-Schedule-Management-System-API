@@ -18,12 +18,12 @@ public class Notification {
     private Long id;
 
     @ManyToOne
-    @Column(name = "student_id")
-    private Student studentId;
+    @JoinColumn(name = "student_id", nullable = true)
+    private Student student;
 
     @ManyToOne
-    @Column(name = "teacher_id")
-    private Teacher teacherId;
+    @JoinColumn(name = "Teacher_id", nullable = true)
+    private Teacher teacher;
 
     @Column(name = "message", nullable = false, columnDefinition = "TEXT")
     private String message;

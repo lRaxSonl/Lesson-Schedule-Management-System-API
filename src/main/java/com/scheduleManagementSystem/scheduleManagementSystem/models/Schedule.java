@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "schedule")
@@ -18,12 +20,16 @@ public class Schedule {
     private Long id;
 
     @ManyToMany
-    @Column(name = "group_teacher_subject_id", nullable = false)
-    private GroupTeacherSubject groupTeacherSubjectId;
+    @JoinTable(
+            name = "schedule_group_teacher_subject", //Имя промежуточной таблицы
+            joinColumns = @JoinColumn(name = "schedule_id"), //Внешний ключ для Schedule
+            inverseJoinColumns = @JoinColumn(name = "group_teacher_subject_id") //Внешний ключ для GroupTeacherSubject
+    )
+    private Set<GroupTeacherSubject> groupTeacherSubjects = new HashSet<>();
 
     @ManyToOne
-    @Column(name = "classes_id", nullable = false)
-    private ClassRoom classesId;
+    @JoinColumn(name = "classroom_id", nullable = false)
+    private ClassRoom classeRoomId;
 
     @Column(name = "start_time", nullable = false)
     private LocalDateTime startTime;
