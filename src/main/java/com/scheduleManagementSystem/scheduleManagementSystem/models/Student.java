@@ -30,11 +30,7 @@ public class Student {
     @Column(name = "fullname", nullable = false, length = 100)
     private String fullname;
 
-    @ManyToMany
-    @JoinTable(
-            name = "student_groups", //Имя промежуточной таблицы
-            joinColumns = @JoinColumn(name = "student_id"), //Внешний ключ для Student
-            inverseJoinColumns = @JoinColumn(name = "group_id") //Внешний ключ для Group
-    )
-    private Set<Group> groups = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "group_id", nullable = false)
+    private Group group;
 }

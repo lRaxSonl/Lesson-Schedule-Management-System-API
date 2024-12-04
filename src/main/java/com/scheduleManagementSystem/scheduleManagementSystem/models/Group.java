@@ -21,6 +21,9 @@ public class Group {
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 
-    @ManyToMany(mappedBy = "groups") //Обратное отношение
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Student> students = new HashSet<>();
+
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Lesson> lessons = new HashSet<>();
 }

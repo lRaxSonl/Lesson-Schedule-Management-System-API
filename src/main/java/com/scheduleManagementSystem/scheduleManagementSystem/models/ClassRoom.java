@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class ClassRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @Column(name = "name", nullable = false, length = 50)
     private String name;

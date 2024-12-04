@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "notifications")
@@ -17,14 +19,6 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "student_id", nullable = true)
-    private Student student;
-
-    @ManyToOne
-    @JoinColumn(name = "Teacher_id", nullable = true)
-    private Teacher teacher;
-
     @Column(name = "message", nullable = false, columnDefinition = "TEXT")
     private String message;
 
@@ -33,4 +27,7 @@ public class Notification {
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "notification", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<NotificationRecipient> notificationRecipients = new HashSet<>();
 }

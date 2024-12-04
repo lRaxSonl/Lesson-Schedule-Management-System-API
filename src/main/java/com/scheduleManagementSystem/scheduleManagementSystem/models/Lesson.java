@@ -6,11 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "group_teacher_subjects")
+@Table(name = "lessons")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GroupTeacherSubject {
+public class Lesson {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,3 +27,4 @@ public class GroupTeacherSubject {
     @JoinColumn(name = "group_id", nullable = false)
     private Group group;
 }
+
