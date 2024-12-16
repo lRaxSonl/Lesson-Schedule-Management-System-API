@@ -7,6 +7,7 @@ import com.scheduleManagementSystem.scheduleManagementSystem.models.Student;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+
 @Service
 @RequiredArgsConstructor
 public class StudentService {
@@ -20,5 +21,4 @@ public class StudentService {
         StudentResponseDto dto = studentMapper.toDto(student);
         return dto;
     }
-
 }

@@ -5,8 +5,10 @@ import com.scheduleManagementSystem.scheduleManagementSystem.dto.response.Studen
 import com.scheduleManagementSystem.scheduleManagementSystem.models.Student;
 import org.mapstruct.Mapper;
 
+
 @Mapper(componentModel = "spring")
 public interface StudentMapper {
     StudentResponseDto toDto(Student student);
     Student toEntity(StudentRequestDto studentRequestDto);
+
 }
