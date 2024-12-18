@@ -24,9 +24,15 @@ public class Teacher {
     @Column(name = "fullname", nullable = false, length = 100)
     private String fullname;
 
+    @Column(name = "password", nullable = false, length = 1000)
+    private String password;
+
     @Column(name = "email", nullable = false, length = 100)
     private String email;
 
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Lesson> lessons = new HashSet<>();
+
+    @Column(nullable = false)
+    private String role = "ROLE_TEACHER"; //Роль для Spring Security
 }

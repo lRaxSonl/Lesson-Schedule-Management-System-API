@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "students")
@@ -33,4 +31,7 @@ public class Student {
     @ManyToOne
     @JoinColumn(name = "group_id", nullable = false)
     private Group group;
+
+    @Column(nullable = false)
+    private String role = "ROLE_STUDENT"; //Роль для Spring Security
 }

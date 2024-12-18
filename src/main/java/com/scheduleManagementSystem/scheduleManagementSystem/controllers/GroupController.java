@@ -22,7 +22,7 @@ public class GroupController {
         return groupService.getGroupById(id);
     }
 
-    @GetMapping("/")
+    @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public List<GroupResponseDto> getAllGroups() {
         return groupService.getAllGroups();
@@ -35,13 +35,13 @@ public class GroupController {
     }
 
     @PutMapping("/update/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.OK)
     public GroupResponseDto updateGroup(@PathVariable Long id, @RequestBody GroupRequestDto groupRequestDto) {
         return groupService.updateGroup(id, groupRequestDto);
     }
 
     @DeleteMapping("/delete/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteGroup(@PathVariable Long id) {
         groupService.deleteGroup(id);
     }
