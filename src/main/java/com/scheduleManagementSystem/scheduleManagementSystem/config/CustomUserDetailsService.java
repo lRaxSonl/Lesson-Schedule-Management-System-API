@@ -1,6 +1,5 @@
 package com.scheduleManagementSystem.scheduleManagementSystem.config;
 
-import com.scheduleManagementSystem.scheduleManagementSystem.dto.response.TeacherResponseDto;
 import com.scheduleManagementSystem.scheduleManagementSystem.interfaces.StudentRepository;
 import com.scheduleManagementSystem.scheduleManagementSystem.interfaces.TeacherRepository;
 import com.scheduleManagementSystem.scheduleManagementSystem.models.Student;
@@ -34,7 +33,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         Student student = studentRepository.findByUsername(username).orElseThrow(() ->
                 new RuntimeException("User not found"));
 
-        return new User(teacher.getUsername(), teacher.getPassword(),
-                List.of(new SimpleGrantedAuthority(teacher.getRole())));
+        return new User(student.getUsername(), student.getPassword(),
+                List.of(new SimpleGrantedAuthority(student.getRole())));
     }
 }

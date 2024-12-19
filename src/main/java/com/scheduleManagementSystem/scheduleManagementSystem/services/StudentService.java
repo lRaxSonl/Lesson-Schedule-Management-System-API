@@ -5,6 +5,7 @@ import com.scheduleManagementSystem.scheduleManagementSystem.dto.response.Studen
 import com.scheduleManagementSystem.scheduleManagementSystem.interfaces.GroupRepository;
 import com.scheduleManagementSystem.scheduleManagementSystem.interfaces.StudentMapper;
 import com.scheduleManagementSystem.scheduleManagementSystem.interfaces.StudentRepository;
+import com.scheduleManagementSystem.scheduleManagementSystem.interfaces.TeacherRepository;
 import com.scheduleManagementSystem.scheduleManagementSystem.models.Group;
 import com.scheduleManagementSystem.scheduleManagementSystem.models.Student;
 import jakarta.transaction.Transactional;
@@ -22,6 +23,7 @@ public class StudentService {
     private final StudentMapper studentMapper;
     private final GroupRepository groupRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TeacherRepository teacherRepository;
 
     public StudentResponseDto getStudentById(Long id) {
         Student student = studentRepository.findById(id).orElseThrow(() ->
@@ -40,9 +42,9 @@ public class StudentService {
     public StudentResponseDto createStudent(StudentRequestDto studentRequestDto) {
         Student student = studentMapper.toEntity(studentRequestDto);
 
-        if (studentRepository.existsStudentByEmail(student.getEmail())) {
+        if (studentRepository.existsStudentByEmail(student.getEmail()) || teacherRepository.existsTeacherByEmail(student.getEmail())) {
             throw new RuntimeException("Student with this email already exists.");
-        }else if (studentRepository.existsStudentByUsername(student.getUsername())) {
+        }else if (studentRepository.existsStudentByUsername(student.getUsername()) || teacherRepository.existsTeacherByUsername(student.getUsername())) {
             throw new RuntimeException("Student with this username already exists.");
         }
 
@@ -64,15 +66,20 @@ public class StudentService {
                 new RuntimeException("Student not found"));
 
         //Проверка и обновление данных
-        if (studentRequestDto.getUsername() != null && !studentRequestDto.getUsername().isBlank()) {
-            student.setUsername(studentRequestDto.getUsername());
-        }
         if (studentRequestDto.getEmail() != null && !studentRequestDto.getEmail().isBlank()) {
-            if (!student.getEmail().equals(studentRequestDto.getEmail()) &&
-                    studentRepository.existsStudentByEmail(studentRequestDto.getEmail())) {
-                throw new RuntimeException("Email already exists.");
+            //Проверка, если email изменился
+            if (!student.getEmail().equals(studentRequestDto.getEmail())) {
+                //Проверка наличия email среди студентов
+                if (studentRepository.existsStudentByEmail(studentRequestDto.getEmail())) {
+                    throw new RuntimeException("Email already exists among students.");
+                }
+                //Проверка наличия email среди учителей
+                if (teacherRepository.existsTeacherByEmail(studentRequestDto.getEmail())) {
+                    throw new RuntimeException("Email already exists among teachers.");
+                }
+                //Установка нового email, если он уникален
+                student.setEmail(studentRequestDto.getEmail());
             }
-            student.setEmail(studentRequestDto.getEmail());
         }
         if (studentRequestDto.getFullname() != null && !studentRequestDto.getFullname().isBlank()) {
             student.setFullname(studentRequestDto.getFullname());
