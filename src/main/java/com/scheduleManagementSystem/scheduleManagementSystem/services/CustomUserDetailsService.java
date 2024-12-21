@@ -1,4 +1,4 @@
-package com.scheduleManagementSystem.scheduleManagementSystem.config;
+package com.scheduleManagementSystem.scheduleManagementSystem.services;
 
 import com.scheduleManagementSystem.scheduleManagementSystem.interfaces.StudentRepository;
 import com.scheduleManagementSystem.scheduleManagementSystem.interfaces.TeacherRepository;

@@ -1,5 +1,6 @@
 package com.scheduleManagementSystem.scheduleManagementSystem.config;
 
+import com.scheduleManagementSystem.scheduleManagementSystem.services.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
