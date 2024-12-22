@@ -1,6 +1,5 @@
 package com.scheduleManagementSystem.scheduleManagementSystem.controllers;
 
-
 import com.scheduleManagementSystem.scheduleManagementSystem.dto.request.GroupRequestDto;
 import com.scheduleManagementSystem.scheduleManagementSystem.dto.response.GroupResponseDto;
 import com.scheduleManagementSystem.scheduleManagementSystem.services.GroupService;

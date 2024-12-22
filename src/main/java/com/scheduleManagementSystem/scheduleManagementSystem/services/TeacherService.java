@@ -8,6 +8,8 @@ import com.scheduleManagementSystem.scheduleManagementSystem.interfaces.TeacherR
 import com.scheduleManagementSystem.scheduleManagementSystem.models.Teacher;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -55,6 +57,18 @@ public class TeacherService {
     public TeacherResponseDto updateTeacher(Long id, TeacherRequestDto teacherRequestDto) {
         Teacher teacher = teacherRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("Teacher not found"));
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String currentUsername;
+        if (principal instanceof UserDetails) {
+            currentUsername = ((UserDetails) principal).getUsername();
+        } else {
+            currentUsername = principal.toString();
+        }
+
+        if (!teacher.getUsername().equals(currentUsername)) {
+            throw new RuntimeException("You do not have permission to update this user");
+        }
 
         //Проверка username
         if (teacherRequestDto.getUsername() != null && !teacherRequestDto.getUsername().isBlank()) {

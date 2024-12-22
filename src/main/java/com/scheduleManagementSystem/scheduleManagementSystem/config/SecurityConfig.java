@@ -36,6 +36,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/teachers/**").hasRole("ROLE_TEACHER")
+                        .requestMatchers("/api/students/**").hasRole("ROLE_STUDENT")
                         .anyRequest().permitAll()
                 )
                 .formLogin(Customizer.withDefaults())
