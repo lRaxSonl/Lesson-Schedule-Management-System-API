@@ -12,9 +12,10 @@ import com.scheduleManagementSystem.scheduleManagementSystem.models.Schedule;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +24,16 @@ public class ScheduleService {
     private final LessonRepository lessonRepository;
     private final ClassRoomRepository classRoomRepository;
     private final ScheduleMapper scheduleMapper;
+
+    public List<ScheduleResponseDto> getAllSchedules() {
+        return scheduleRepository.findAll().stream().map(schedule -> {
+            Lesson lesson = lessonRepository.findById(schedule.getLesson().getId())
+                    .orElseThrow(() -> new RuntimeException("Lesson not found."));
+            ClassRoom classRoom = classRoomRepository.findById(schedule.getClassRoom().getId())
+                    .orElseThrow(() -> new RuntimeException("Classroom not found."));
+            return scheduleMapper.toDto(schedule, lesson, classRoom);
+        }).collect(Collectors.toList());
+    }
 
     public ScheduleResponseDto getScheduleById(Long id) {
         Schedule schedule = scheduleRepository.findById(id)
