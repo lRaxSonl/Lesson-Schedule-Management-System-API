@@ -36,9 +36,17 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/teachers/**").hasRole("ROLE_TEACHER")
-                        .requestMatchers("/api/students/**").hasRole("ROLE_STUDENT")
-                        .anyRequest().permitAll()
+                        .requestMatchers("/api/teachers/**", "/api/schedule/create/**", "/api/schedule/update/**",
+                                "/api/schedule/delete/**", "/api/groups/delete/**", "/api/groups/update/**",
+                                "/api/lesson/**").hasRole("TEACHER")
+
+                        .requestMatchers("/api/students/**").hasRole("STUDENT")
+
+                        .requestMatchers("/api/schedule/**", "/api/groups/**").hasAnyRole("STUDENT", "TEACHER")
+
+                        .requestMatchers("/api/auth/**", "/api/teachers/create", "/api/students/create").permitAll()
+
+                        .anyRequest().authenticated()
                 )
                 .formLogin(Customizer.withDefaults())
                 .logout(Customizer.withDefaults())
