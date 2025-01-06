@@ -28,8 +28,7 @@ public class TeacherService {
         Teacher teacher = teacherRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("Teacher not found"));
 
-        TeacherResponseDto dto = teacherMapper.toDto(teacher);
-        return dto;
+        return teacherMapper.toDto(teacher);
     }
 
     public List<TeacherResponseDto> getAllTeachers() {

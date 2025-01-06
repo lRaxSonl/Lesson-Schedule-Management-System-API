@@ -10,6 +10,8 @@ import com.scheduleManagementSystem.scheduleManagementSystem.models.Group;
 import com.scheduleManagementSystem.scheduleManagementSystem.models.Student;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;;
@@ -64,6 +66,15 @@ public class StudentService {
     public StudentResponseDto updateStudent(Long id, StudentRequestDto studentRequestDto) {
         Student student = studentRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("Student not found"));
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String CurrentUsername;
+        if (principal instanceof UserDetails) {
+            CurrentUsername = ((UserDetails) principal).getUsername();
+            if (!student.getUsername().equals(CurrentUsername)) {
+                throw new RuntimeException("You do not have permission to update this student.");
+            }
+        }
 
         //Проверка и обновление данных
         if (studentRequestDto.getEmail() != null && !studentRequestDto.getEmail().isBlank()) {

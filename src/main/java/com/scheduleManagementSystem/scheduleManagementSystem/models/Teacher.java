@@ -34,5 +34,5 @@ public class Teacher {
     private Set<Lesson> lessons = new HashSet<>();
 
     @Column(nullable = false)
-    private String role = "ROLE_TEACHER"; //Роль для Spring Security
+    private String role = "ROLE_TEACHER";
 }

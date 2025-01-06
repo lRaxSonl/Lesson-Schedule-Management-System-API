@@ -25,6 +25,15 @@ public class LessonService {
     @Transactional
     public LessonResponseDto createLesson(LessonRequestDto dto) {
         Lesson lesson = lessonMapper.toEntity(dto);
+
+        lesson.setTeacher(teacherRepository.findById(dto.getTeacherId())
+                .orElseThrow(() -> new RuntimeException("Teacher not found")));
+        lesson.setSubject(subjectRepository.findById(dto.getSubjectId())
+                .orElseThrow(() -> new RuntimeException("Subject not found")));
+        lesson.setGroup(groupRepository.findById(dto.getGroupId())
+                .orElseThrow(() -> new RuntimeException("Group not found")));
+
+
         Lesson savedLesson = lessonRepository.save(lesson);
         return lessonMapper.toDto(savedLesson);
     }

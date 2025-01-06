@@ -17,7 +17,7 @@ public class SubjectService {
     private final SubjectRepository subjectRepository;
     private final SubjectMapper subjectMapper;
 
-    List<SubjectResponseDto> getAllSubjects() {
+    public List<SubjectResponseDto> getAllSubjects() {
         return subjectRepository.findAll().stream().map(subjectMapper::toDto).collect(Collectors.toList());
     }
 

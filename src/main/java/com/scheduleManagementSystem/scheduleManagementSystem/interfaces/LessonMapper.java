@@ -5,6 +5,7 @@ import com.scheduleManagementSystem.scheduleManagementSystem.dto.response.Lesson
 import com.scheduleManagementSystem.scheduleManagementSystem.dto.response.LessonResponseDto;
 import com.scheduleManagementSystem.scheduleManagementSystem.models.Lesson;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface LessonMapper {

@@ -1,4 +1,5 @@
 package com.scheduleManagementSystem.scheduleManagementSystem.interfaces;
+import com.scheduleManagementSystem.scheduleManagementSystem.models.Group;
 import com.scheduleManagementSystem.scheduleManagementSystem.models.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -12,4 +13,5 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     Boolean existsStudentByUsername(String username);
 
     Optional<Student> findByUsername(String username);
+    Optional<Student> findByGroup(Group group);
 }
