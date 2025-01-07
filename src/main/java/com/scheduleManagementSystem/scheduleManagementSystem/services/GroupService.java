@@ -17,12 +17,15 @@ public class GroupService {
     private final GroupRepository groupRepository;
     private final GroupMapper groupMapper;
 
+    public Group getGroupEntityById(Long id) {
+        return groupRepository.findById(id).orElse(null);
+    }
+
     public GroupResponseDto getGroupById(Long id) {
         Group group = groupRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("Group not found"));
 
-        GroupResponseDto groupResponseDto = groupMapper.toDto(group);
-        return groupResponseDto;
+        return groupMapper.toDto(group);
     }
 
     public List<GroupResponseDto> getAllGroups() {

@@ -2,10 +2,7 @@ package com.scheduleManagementSystem.scheduleManagementSystem.services;
 
 import com.scheduleManagementSystem.scheduleManagementSystem.dto.request.StudentRequestDto;
 import com.scheduleManagementSystem.scheduleManagementSystem.dto.response.StudentResponseDto;
-import com.scheduleManagementSystem.scheduleManagementSystem.interfaces.GroupRepository;
-import com.scheduleManagementSystem.scheduleManagementSystem.interfaces.StudentMapper;
-import com.scheduleManagementSystem.scheduleManagementSystem.interfaces.StudentRepository;
-import com.scheduleManagementSystem.scheduleManagementSystem.interfaces.TeacherRepository;
+import com.scheduleManagementSystem.scheduleManagementSystem.interfaces.*;
 import com.scheduleManagementSystem.scheduleManagementSystem.models.Group;
 import com.scheduleManagementSystem.scheduleManagementSystem.models.Student;
 import jakarta.transaction.Transactional;
@@ -26,13 +23,13 @@ public class StudentService {
     private final GroupRepository groupRepository;
     private final PasswordEncoder passwordEncoder;
     private final TeacherRepository teacherRepository;
+    private final GroupService groupService;
 
     public StudentResponseDto getStudentById(Long id) {
         Student student = studentRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("Student not found"));
 
-        StudentResponseDto dto = studentMapper.toDto(student);
-        return dto;
+        return studentMapper.toDto(student);
     }
 
     public List<StudentResponseDto> getAllStudents() {

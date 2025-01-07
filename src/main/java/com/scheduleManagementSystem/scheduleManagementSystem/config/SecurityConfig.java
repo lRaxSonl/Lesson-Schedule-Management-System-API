@@ -36,7 +36,23 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()
+
+                        .requestMatchers("/api/auth/**", "/api/teachers/create", "/api/students/create").permitAll()
+
+                        .requestMatchers("/api/teachers/**", "/api/schedule/create/**", "/api/schedule/update/**",
+                                "/api/schedule/delete/**", "/api/groups/delete/**", "/api/groups/update/**").hasRole("TEACHER")
+
+                        .requestMatchers("/api/teachers/**", "/api/schedule/create/", "/api/schedule/update/",
+                                "/api/schedule/delete/**", "/api/groups/delete/**", "/api/groups/update/",
+                                "/api/lesson/**", "/api/lesson").hasRole("TEACHER")
+
+                        .requestMatchers("/api/students/**", "/api/students").hasAnyRole("STUDENT")
+
+                        .requestMatchers("/api/schedule/**", "/api/groups/**", "/api/schedule", "/api/groups")
+                        .hasAnyRole("STUDENT", "TEACHER")
+
+                        .requestMatchers("/api/auth/**", "/api/teachers/create", "/api/students/create").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 

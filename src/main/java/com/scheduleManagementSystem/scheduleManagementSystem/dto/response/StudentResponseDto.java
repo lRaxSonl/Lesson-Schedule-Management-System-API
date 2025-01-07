@@ -1,5 +1,4 @@
 package com.scheduleManagementSystem.scheduleManagementSystem.dto.response;
-import com.scheduleManagementSystem.scheduleManagementSystem.models.Group;
 import lombok.Data;
 
 
@@ -9,5 +8,5 @@ public class StudentResponseDto {
     private String username;
     private String fullname;
     private String email;
-    private Group group;
+    private String groupName;
 }

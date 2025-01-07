@@ -8,5 +8,5 @@ import java.util.List;
 public class GroupResponseDto {
     private Long id;
     private String name;
-    private List<Student> students;
+    private List<StudentResponseDto> students;
 }

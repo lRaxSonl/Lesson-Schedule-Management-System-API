@@ -8,6 +8,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,8 +71,10 @@ public class ScheduleService {
                 new RuntimeException("Classroom not found.")
         ));
 
-        schedule.setStartTime(LocalDateTime.parse(dto.getStartTime()));
-        schedule.setEndTime(LocalDateTime.parse(dto.getEndTime()));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        schedule.setStartTime(LocalDateTime.parse(dto.getStartTime(), formatter));
+        schedule.setEndTime(LocalDateTime.parse(dto.getEndTime(), formatter));
 
         Schedule updatedSchedule = scheduleRepository.save(schedule);
 
