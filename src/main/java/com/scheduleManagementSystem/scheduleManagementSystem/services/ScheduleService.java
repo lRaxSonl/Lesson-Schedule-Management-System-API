@@ -78,7 +78,7 @@ public class ScheduleService {
         Schedule updatedSchedule = scheduleRepository.save(schedule);
 
 
-        // Отправка уведомлений студентам группы
+        //Notification to students and teachers
         Lesson lesson = updatedSchedule.getLesson();
         Group group = lesson.getGroup();
         String message = "Расписание для группы " + group.getName() + " было обновлено.";
