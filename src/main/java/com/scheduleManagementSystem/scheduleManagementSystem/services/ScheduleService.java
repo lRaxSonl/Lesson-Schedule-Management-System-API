@@ -7,9 +7,10 @@ import com.scheduleManagementSystem.scheduleManagementSystem.models.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,19 +51,10 @@ public class ScheduleService {
     @Transactional
     public ScheduleResponseDto createSchedule(ScheduleRequestDto dto) {
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            LocalDateTime startTime = LocalDateTime.parse(dto.getStartTime().trim(), formatter);
-            LocalDateTime endTime = LocalDateTime.parse(dto.getEndTime().trim(), formatter);
-
-
             Schedule schedule = scheduleMapper.toEntity(dto);
-            schedule.setStartTime(startTime);
-            schedule.setEndTime(endTime);
-
             Schedule savedSchedule = scheduleRepository.save(schedule);
-
             return getScheduleById(savedSchedule.getId());
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException("Error creating schedule: " + e.getMessage());
         }
     }
