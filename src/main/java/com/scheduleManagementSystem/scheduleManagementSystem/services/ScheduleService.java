@@ -1,5 +1,6 @@
 package com.scheduleManagementSystem.scheduleManagementSystem.services;
 
+import com.scheduleManagementSystem.scheduleManagementSystem.dto.request.ScheduleInfoRequestDto;
 import com.scheduleManagementSystem.scheduleManagementSystem.dto.request.ScheduleRequestDto;
 import com.scheduleManagementSystem.scheduleManagementSystem.dto.response.ScheduleResponseDto;
 import com.scheduleManagementSystem.scheduleManagementSystem.interfaces.*;
@@ -7,9 +8,11 @@ import com.scheduleManagementSystem.scheduleManagementSystem.models.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +26,8 @@ public class ScheduleService {
     private final ScheduleMapper scheduleMapper;
     private final NotificationService notificationService;
     private final StudentRepository studentRepository;
+    private final TeacherRepository teacherRepository;
+    private final GroupRepository groupRepository;
 
     public List<ScheduleResponseDto> getAllSchedules() {
         return scheduleRepository.findAll().stream().map(schedule -> {
@@ -45,6 +50,61 @@ public class ScheduleService {
                 .orElseThrow(() -> new RuntimeException("Classroom not found"));
 
         return scheduleMapper.toDto(schedule);
+    }
+
+    public List<ScheduleResponseDto> getSchedulesByTeacherUsername(ScheduleInfoRequestDto dto) {
+        try {
+            Teacher teacher = teacherRepository.findByUsername(dto.getDetails()).orElseThrow(() ->
+                    new RuntimeException("Teacher not found."));
+
+            List<Lesson> lessons = lessonRepository.findAllByTeacherId(teacher.getId());
+            List<Schedule> schedules = new ArrayList<>();
+            for (Lesson lesson : lessons) {
+                schedules.addAll(scheduleRepository.findAllByLessonId(lesson.getId()));
+            }
+
+            return schedules.stream().map(scheduleMapper::toDto).collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new RuntimeException("Error getting schedules");
+        }
+    }
+
+    public List<ScheduleResponseDto> getSchedulesByGroupName(ScheduleInfoRequestDto dto) {
+        try {
+            Group group = groupRepository.findByName(dto.getDetails());
+
+            List<Lesson> lessons = lessonRepository.findAllByGroupId(group.getId());
+
+            List<Schedule> schedules = new ArrayList<>();
+            for (Lesson lesson : lessons) {
+                schedules.addAll(scheduleRepository.findAllByLessonId(lesson.getId()));
+            }
+
+            return schedules.stream().map(scheduleMapper::toDto).collect(Collectors.toList());
+        }catch (Exception e) {
+            throw new RuntimeException("Error getting schedules: " + e.getMessage());
+        }
+    }
+
+
+    public List<ScheduleResponseDto> getSchedulesByStudentUsername(ScheduleInfoRequestDto dto) {
+        try {
+            Student student = studentRepository.findByUsername(dto.getDetails())
+                    .orElseThrow(() -> new RuntimeException("Student not found."));
+
+            Group group = groupRepository.findByStudentsContains(student);
+
+            List<Lesson> lessons = lessonRepository.findAllByGroupId(group.getId());
+
+            List<Schedule> schedules = new ArrayList<>();
+            for (Lesson lesson : lessons) {
+                schedules.addAll(scheduleRepository.findAllByLessonId(lesson.getId()));
+            }
+
+            return schedules.stream().map(scheduleMapper::toDto).collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new RuntimeException("Error getting schedules: " + e.getMessage());
+        }
     }
 
     @Transactional

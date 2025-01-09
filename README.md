@@ -1,133 +1,324 @@
-# Lesson-Schedule-Management-System-API
+# Schedule Management System
 
-https://drawsql.app/teams/raxsons-team/diagrams/lesson-schedule-management-system
+## Project Description
 
-<img width="568" alt="opera_iYhwY2IpOV" src="https://github.com/user-attachments/assets/7d4581fd-0413-4c14-a525-5083a30c7c1b">
+The Schedule Management System is designed for creating, editing, and viewing schedules for students, teachers, and groups. It allows users to fetch schedules by group, student, or teacher, and manage courses, classrooms, and notifications.
 
+## Tech Stack
 
+- **Spring Boot** - The main framework for building the application.
+- **MariaDB** - Database for storing schedules, groups, students, and teachers information.
+- **Spring Data JPA** - For interacting with the database through repositories.
+- **Spring Security** - For security and user authorization.
+- **MapStruct** - For mapping entities to DTOs and vice versa.
+- **JWT** - For user authentication via JSON Web Tokens.
+- **Lombok** - To simplify Java code.
 
-<h1>Database documentation for the class schedule management system</h1>
+## Requirements
 
-<h2>Tables and their description:</h2>
+1. **Java 17 or higher**.
+2. **MariaDB** or compatible database.
+3. **Maven** for building and managing dependencies.
 
-<h3>students</h3>
+## Setting Up the Project
 
-<b>Description: Stores information about registered students.</b>
-<b>Fields:</b><br>
-  id (int, PK) - The unique identifier of the student.<br>
-  username (varchar) is the student's login to log in.<br>
-  password (varchar) is a hashed password.<br>
-  email (varchar) is the student's email address.<br>
-  fullname (varchar) is the full name of the student.<br>
-<b>Connections:</b><br>
-  Linked to student_groups via id to identify the groups the student belongs to.
-  teachers<br>
+### 1. Clone the repository
 
-<b>Description: Stores information about teachers.</b><br>
-<b>Fields:</b><br>
-  id (int, PK) - The unique identifier of the teacher.<br>
-  username (varchar) - The teacher's login to log in.<br>
-  fullname (varchar) is the full name of the teacher.<br>
-  email (varchar) is the teacher's email address.<br>
-<b>Links:</b><br>
-  Linked to subject_teachers to display which subjects a teacher can teach.<br>
+```bash
+git clone https://github.com/yourusername/ScheduleManagementSystem.git
+cd ScheduleManagementSystem
+```
 
-  
-<h3>groups</h3>
+# Creating database
+```
+CREATE DATABASE schedule_management_system;
+CREATE USER 'root'@'localhost' IDENTIFIED BY 'yourpassword';
+GRANT ALL PRIVILEGES ON schedule_management_system.* TO 'root'@'localhost';
+```
 
-<b>Description: Stores information about groups of students.</b><br>
-<b>Fields:</b><br>
-  id (int, PK) - The unique identifier of the group.<br>
-  name (varchar) - The name of the group (for example, "101").<br>
-  <br>
-  <b>Links:</b><br>
-  Linked to student_groups to track students in groups.<br>
-  Linked to group_subjects to determine the available items for the group.<br>
-  student_groups (Students in groups)<br>
+# Configure the application
+```
+spring.application.name=ScheduleManagementSystem
+spring.datasource.url=jdbc:mariadb://localhost:3306/schedule_management_system
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
+spring.datasource.username=root
+spring.datasource.password=yourpassword
+spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+```
 
-<b>Description: Stores connections between students and their groups.</b><br>
-<br>
-<b>Fields:</b><br>
-  id (int, PK) is the unique identifier of the record.<br>
-  group_id (int, FK) - Link to groups.id .<br>
-  student_id (int, FK) - Link to students.id .<br>
-  <b>Connections:</b><br>
-  Allows you to find students belonging to a certain group.<br>
+# Auto-update database schema
+```
+spring.jpa.hibernate.ddl-auto=update
+```
 
-  
-<h3>subjects</h3>
+# Enable SQL query logging
+```
+spring.jpa.show-sql=true
+```
 
-<b>Description: Stores information about items.</b><br>
-<b>Fields:</b><br>
-  id (int, PK) - The unique identifier of the item.<br>
-  name (varchar) - The name of the subject (for example, "Mathematics").<br>
-  <b>Links:</b><br>
-  Linked to subject_teachers to display which teachers teach this subject.<br>
-  Linked to group_subjects to indicate the availability of subjects for groups.<br>
-  subject_teachers (Subjects and teachers)<br>
-<br>
-<b>Description: Displays the relationship between subjects and teachers.</b><br>
-<br>
-<br>
-<b>Fields:</b><br>
-  id (int, PK) - The unique identifier of the record.<br>
-  teacher_id (int, FK) - Link to teachers.id.<br>
-  subject_id (int, FK) - Link to subjects.id.<br>
-  <b>Connections:</b><br>
-  Allows you to find which subjects a particular teacher can teach.<br>
-  group_subjects (Subjects and groups)<br>
-<br>
-<b>Description: Stores information about which items are available for each group.<b><br>
-<br>
-<br>
-<b>Fields:</b><br>
-  id (int, PK) - The unique identifier of the record.<br>
-  group_id (int, FK) - Link to groups.id.<br>
-  subject_id (int, FK) - Link to subjects.id.<br>
-  <br>
-  <b>Communications:</b><br>
-  Allows you to find the subjects available to the students of the group before creating a schedule.<br>
-  classes (Audiences)<br>
-<br>
-<b>Description: Stores information about classrooms.</b><br>
-<br>
-<b>Fields:</b><br>
-  id (int, PK) is a unique identifier of the audience.<br>
-  name (varchar) - The name or number of the audience.<br>
-  capacity (int) - The capacity of the audience.<br>
-  location (varchar) - The location of the audience.<br>
-  <b>Connections:</b><br>
-  Linked to schedule to determine the location of lessons.<br>
-  <br>
-  <h3>schedule</h3>
+# Running application
+```
+mvn spring-boot:run
+```
 
-  <b>Description: Stores information about the class schedule.</b><br>
-  <b>Fields:</b><br>
-  id (int, PK) - The unique identifier of the schedule entry.<br>
-  subject_id (int, FK) - Link to subjects.id.<br>
-  teacher_id (int, FK) - Link to teachers.id.<br>
-  classes_id (int, FK) - Link to classes.id.<br>
-  group_id (int, FK) - Link to groups.id.<br>
-  start_time (datetime) - The start time of the lesson.<br>
-  end_time (datetime) - The end time of the lesson.<br>
-  <b>Connections:</b><br>
-  Allows you to track class schedules for groups and teachers in specific classrooms.<br>
+<h3>Once the application starts, it will be available at http://localhost:8080</h3>
 
-  <h3>notifications</h3>
-<br>
-<b>Description: Stores notifications for students and teachers.</b><br>
-<b>Fields:<b><br>
-  id (int, PK) - The unique identifier of the notification.<br>
-  user_id (int, FK) - Link to students.id or teachers.id (generalized field for users).<br>
-  message (text) - The text of the notification.<br>
-  is_read (boolean) - The status of reading the notification (true/false).<br>
-  created_at (timestamp) - The date and time the notification was created.<br>
-<b>Communications:</b><br>
-Allows you to send notifications about schedule changes or other important events.<br>
-  <br>
-<b>Description of the relationships between tables:</b><br>
-students <-> student_groups <-> groups: Allows you to determine which group each student belongs to.<br>
-groups <-> group_subjects <-> subjects: Allows you to determine which subjects are available to the students of the group before creating a schedule.<br>
-teachers <-> subject_teachers <-> subjects: Allows you to determine which subjects each teacher can teach.<br>
-schedule: Connects subjects, teachers, classes, and groups to create a specific schedule.<br>
-notifications: Informs users about schedule changes or other events.<br>
+# Schedule Management System API Documentation
+
+## Authentication API
+
+### `POST /api/auth/login`
+- **Description**: Authenticates a user and returns a JWT token for further requests.
+- **Request Body**:
+  - `username` (string): The username of the user.
+  - `password` (string): The password of the user.
+- **Response**:
+  - `token` (string): JWT token used for subsequent authenticated requests.
+- **Response Codes**:
+  - `200 OK`: Successfully authenticated and token returned.
+  - `401 Unauthorized`: Invalid credentials.
+
+---
+
+## Classroom API
+
+### `GET /api/classroom`
+- **Description**: Retrieves a list of all classrooms.
+- **Response**:
+  - A list of classrooms with details such as `id`, `name`, and `capacity`.
+- **Response Codes**:
+  - `200 OK`: Successfully retrieved list of classrooms.
+
+### `GET /api/classroom/{id}`
+- **Description**: Retrieves details of a specific classroom by ID.
+- **Parameters**:
+  - `id` (long): ID of the classroom to retrieve.
+- **Response**:
+  - The classroom details with `id`, `name`, and `capacity`.
+- **Response Codes**:
+  - `200 OK`: Classroom details retrieved successfully.
+  - `404 Not Found`: Classroom with specified ID not found.
+
+### `POST /api/classroom/create`
+- **Description**: Creates a new classroom.
+- **Request Body**:
+  - `name` (string): The name of the classroom.
+  - `capacity` (integer): The capacity of the classroom.
+- **Response**:
+  - The details of the newly created classroom with `id`, `name`, and `capacity`.
+- **Response Codes**:
+  - `201 Created`: Classroom created successfully.
+
+### `PUT /api/classroom/update/{id}`
+- **Description**: Updates an existing classroom by ID.
+- **Parameters**:
+  - `id` (long): ID of the classroom to update.
+- **Request Body**:
+  - `name` (string): The updated name of the classroom.
+  - `capacity` (integer): The updated capacity of the classroom.
+- **Response**:
+  - The updated classroom details.
+- **Response Codes**:
+  - `200 OK`: Classroom updated successfully.
+  - `404 Not Found`: Classroom with the specified ID not found.
+
+### `DELETE /api/classroom/delete/{id}`
+- **Description**: Deletes a classroom by ID.
+- **Parameters**:
+  - `id` (long): ID of the classroom to delete.
+- **Response**: No content response (204).
+- **Response Codes**:
+  - `204 No Content`: Classroom deleted successfully.
+  - `404 Not Found`: Classroom with the specified ID not found.
+
+---
+
+## Group API
+
+### `GET /api/groups/{id}`
+- **Description**: Retrieves details of a specific group by ID.
+- **Parameters**:
+  - `id` (long): ID of the group to retrieve.
+- **Response**:
+  - The group details with `id`, `name`, and `course`.
+- **Response Codes**:
+  - `200 OK`: Group details retrieved successfully.
+  - `404 Not Found`: Group with the specified ID not found.
+
+### `GET /api/groups`
+- **Description**: Retrieves a list of all groups.
+- **Response**:
+  - A list of groups with `id`, `name`, and `course`.
+- **Response Codes**:
+  - `200 OK`: Successfully retrieved list of groups.
+
+### `POST /api/groups/create`
+- **Description**: Creates a new group.
+- **Request Body**:
+  - `name` (string): The name of the group.
+  - `course` (string): The course of the group.
+- **Response**:
+  - The details of the newly created group with `id`, `name`, and `course`.
+- **Response Codes**:
+  - `201 Created`: Group created successfully.
+
+### `PUT /api/groups/update/{id}`
+- **Description**: Updates an existing group by ID.
+- **Parameters**:
+  - `id` (long): ID of the group to update.
+- **Request Body**:
+  - `name` (string): The updated name of the group.
+  - `course` (string): The updated course of the group.
+- **Response**:
+  - The updated group details.
+- **Response Codes**:
+  - `200 OK`: Group updated successfully.
+  - `404 Not Found`: Group with the specified ID not found.
+
+### `DELETE /api/groups/delete/{id}`
+- **Description**: Deletes a group by ID.
+- **Parameters**:
+  - `id` (long): ID of the group to delete.
+- **Response**: No content response (204).
+- **Response Codes**:
+  - `204 No Content`: Group deleted successfully.
+  - `404 Not Found`: Group with the specified ID not found.
+
+---
+
+## Lesson API
+
+### `GET /api/lesson/`
+- **Description**: Retrieves a list of all lessons.
+- **Response**:
+  - A list of lessons with `id`, `name`, `teacher`, and `time`.
+- **Response Codes**:
+  - `200 OK`: Successfully retrieved list of lessons.
+
+### `GET /api/lesson/{id}`
+- **Description**: Retrieves details of a specific lesson by ID.
+- **Parameters**:
+  - `id` (long): ID of the lesson to retrieve.
+- **Response**:
+  - The lesson details with `id`, `name`, `teacher`, and `time`.
+- **Response Codes**:
+  - `200 OK`: Lesson details retrieved successfully.
+  - `404 Not Found`: Lesson with the specified ID not found.
+
+### `POST /api/lesson/create`
+- **Description**: Creates a new lesson.
+- **Request Body**:
+  - `name` (string): The name of the lesson.
+  - `teacher` (string): The teacher's name.
+  - `time` (string): The time of the lesson (in `YYYY-MM-DD HH:mm:ss` format).
+- **Response**:
+  - The details of the newly created lesson with `id`, `name`, `teacher`, and `time`.
+- **Response Codes**:
+  - `201 Created`: Lesson created successfully.
+
+### `PUT /api/lesson/update/{id}`
+- **Description**: Updates an existing lesson by ID.
+- **Parameters**:
+  - `id` (long): ID of the lesson to update.
+- **Request Body**:
+  - `name` (string): The updated name of the lesson.
+  - `teacher` (string): The updated teacher name.
+  - `time` (string): The updated time of the lesson.
+- **Response**:
+  - The updated lesson details.
+- **Response Codes**:
+  - `200 OK`: Lesson updated successfully.
+  - `404 Not Found`: Lesson with the specified ID not found.
+
+### `DELETE /api/lesson/delete/{id}`
+- **Description**: Deletes a lesson by ID.
+- **Parameters**:
+  - `id` (long): ID of the lesson to delete.
+- **Response**: No content response (204).
+- **Response Codes**:
+  - `204 No Content`: Lesson deleted successfully.
+  - `404 Not Found`: Lesson with the specified ID not found.
+
+---
+
+## Schedule API
+
+### `GET /api/schedule/{id}`
+- **Description**: Retrieves details of a specific schedule by ID.
+- **Parameters**:
+  - `id` (long): ID of the schedule to retrieve.
+- **Response**:
+  - The schedule details with `id`, `lesson`, `teacher`, and `time`.
+- **Response Codes**:
+  - `200 OK`: Schedule retrieved successfully.
+  - `404 Not Found`: Schedule with the specified ID not found.
+
+### `POST /api/schedule/byGroup`
+- **Description**: Retrieves the schedule for a specific group.
+- **Request Body**:
+  - `groupName` (string): The name of the group.
+- **Response**:
+  - A list of schedules associated with the group.
+- **Response Codes**:
+  - `200 OK`: Schedules for the group retrieved successfully.
+
+### `POST /api/schedule/byStudent`
+- **Description**: Retrieves the schedule for a specific student.
+- **Request Body**:
+  - `studentUsername` (string): The username of the student.
+- **Response**:
+  - A list of schedules associated with the student.
+- **Response Codes**:
+  - `200 OK`: Schedules for the student retrieved successfully.
+
+### `POST /api/schedule/byTeacher`
+- **Description**: Retrieves the schedule for a specific teacher.
+- **Request Body**:
+  - `teacherUsername` (string): The username of the teacher.
+- **Response**:
+  - A list of schedules associated with the teacher.
+- **Response Codes**:
+  - `200 OK`: Schedules for the teacher retrieved successfully.
+
+### `GET /api/schedule`
+- **Description**: Retrieves a list of all schedules.
+- **Response**:
+  - A list of all schedules with lesson details.
+- **Response Codes**:
+  - `200 OK`: Successfully retrieved list of schedules.
+
+### `POST /api/schedule/create`
+- **Description**: Creates a new schedule.
+- **Request Body**:
+  - `lessonId` (long): The lesson ID to be scheduled.
+  - `classRoomId` (long): The classroom ID where the lesson will take place.
+  - `startTime` (string): The start time of the lesson.
+  - `endTime` (string): The end time of the lesson.
+- **Response**:
+  - The details of the newly created schedule.
+- **Response Codes**:
+  - `201 Created`: Schedule created successfully.
+
+### `PUT /api/schedule/update/{id}`
+- **Description**: Updates an existing schedule by ID.
+- **Parameters**:
+  - `id` (long): ID of the schedule to update.
+- **Request Body**:
+  - `lessonId` (long): Updated lesson ID.
+  - `classRoomId` (long): Updated classroom ID.
+  - `startTime` (string): Updated start time.
+  - `endTime` (string): Updated end time.
+- **Response**:
+  - The updated schedule details.
+- **Response Codes**:
+  - `200 OK`: Schedule updated successfully.
+  - `404 Not Found`: Schedule with the specified ID not found.
+
+### `DELETE /api/schedule/delete/{id}`
+- **Description**: Deletes a schedule by ID.
+- **Parameters**:
+  - `id` (long): ID of the schedule to delete.
+- **Response**: No content response (204).
+- **Response Codes**:
+  - `204 No Content`: Schedule deleted successfully.
+  - `404 Not Found`: Schedule with the specified ID not found.

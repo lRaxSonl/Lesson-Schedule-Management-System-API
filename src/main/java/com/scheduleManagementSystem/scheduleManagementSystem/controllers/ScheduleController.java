@@ -1,5 +1,6 @@
 package com.scheduleManagementSystem.scheduleManagementSystem.controllers;
 
+import com.scheduleManagementSystem.scheduleManagementSystem.dto.request.ScheduleInfoRequestDto;
 import com.scheduleManagementSystem.scheduleManagementSystem.dto.request.ScheduleRequestDto;
 import com.scheduleManagementSystem.scheduleManagementSystem.dto.response.ScheduleResponseDto;
 import com.scheduleManagementSystem.scheduleManagementSystem.services.ScheduleService;
@@ -20,6 +21,25 @@ public class ScheduleController {
     @ResponseStatus(HttpStatus.OK)
     public ScheduleResponseDto getScheduleById(@PathVariable Long id) {
         return scheduleService.getScheduleById(id);
+    }
+
+    @PostMapping("/byGroup")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ScheduleResponseDto> getScheduleByGroupName(@RequestBody ScheduleInfoRequestDto groupName) {
+        return scheduleService.getSchedulesByGroupName(groupName);
+    }
+
+    @PostMapping("/byStudent")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ScheduleResponseDto> getScheduleByStudentUsername(@RequestBody ScheduleInfoRequestDto studentUsername) {
+        return scheduleService.getSchedulesByStudentUsername(studentUsername);
+    }
+
+
+    @PostMapping("/byTeacher")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ScheduleResponseDto> getScheduleByTeacherName(@RequestBody ScheduleInfoRequestDto teacherUsername) {
+        return scheduleService.getSchedulesByTeacherUsername(teacherUsername);
     }
 
 

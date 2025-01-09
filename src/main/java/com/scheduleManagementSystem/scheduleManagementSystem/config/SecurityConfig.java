@@ -36,7 +36,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-
+                                .anyRequest().permitAll()
+                        /*
                         .requestMatchers("/api/auth/**", "/api/teachers/create", "/api/students/create").permitAll()
 
                         .requestMatchers("/api/teachers/**", "/api/schedule/create/**", "/api/schedule/update/**",
@@ -53,6 +54,7 @@ public class SecurityConfig {
 
                         .requestMatchers("/api/auth/**", "/api/teachers/create", "/api/students/create").permitAll()
                         .anyRequest().authenticated()
+                         */
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
