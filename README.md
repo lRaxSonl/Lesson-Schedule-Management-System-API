@@ -1,5 +1,7 @@
 # Schedule Management System
 
+![image](https://github.com/user-attachments/assets/0ffa7b49-dc39-4ee7-9649-9d7a7e10d0bf)
+
 ## Project Description
 
 The Schedule Management System is designed for creating, editing, and viewing schedules for students, teachers, and groups. It allows users to fetch schedules by group, student, or teacher, and manage courses, classrooms, and notifications.
